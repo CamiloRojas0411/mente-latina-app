@@ -1,0 +1,28 @@
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../services/firebase';
+
+export default function RegisterScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const register = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigation.navigate('Home');
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Registro</Text>
+      <TextInput label="Correo" value={email} onChangeText={setEmail} />
+      <TextInput label="Contraseña" secureTextEntry value={password} onChangeText={setPassword} />
+      <Button mode="contained" onPress={register} style={{ marginTop: 20 }}>Registrarse</Button>
+    </View>
+  );
+}
